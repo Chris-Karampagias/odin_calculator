@@ -1,0 +1,91 @@
+body {
+    background-color : grey;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.calculator{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+    background-color: rgba(35, 39, 37, 0.689);
+    height: 525px;
+    width: 470px;
+    padding:20px;
+    border-radius: 7px;
+}
+
+.numbers-operators-container{
+    display:flex;
+    justify-content: space-between;
+    gap:10px;
+}
+
+.numbers-container{
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    flex:4;
+    gap:5px;
+}
+
+.operators-container{
+    display:grid;
+    grid-template-columns: 1fr;
+    flex:1;
+    gap:5px;
+}
+
+.screen{
+    display:flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 80px;
+    border: 10px solid black;
+    border-radius: 7px;
+    display:flex;
+    flex-direction: column;
+    background-color: antiquewhite;
+    padding:5px;
+}
+
+.operations{
+    font-size: 35px;
+}
+
+.result{
+    font-size: 45px;
+}
+
+.ac-c-container{
+    display:flex;
+    justify-content: space-evenly;
+    gap:5px;
+}
+
+.ac-c-container .btn{
+    flex:1;
+    background-color: red;
+}
+
+.btn{
+    font-size: 60px;
+    border-radius: 7px;
+    border: 2px solid black;
+    transition: all 0.15s ease-in-out
+}
+
+.btn:hover{
+    transform: scale(1.05);
+}
+
+.operators-container .btn{
+    background-color: rgb(239, 179, 15);
+}
+
+.numbers-container .equality{
+    background-color: green;
+}
+
