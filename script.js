@@ -38,7 +38,7 @@ operators.forEach(operator => {
             operationsDisplay += e.target.textContent;
             operationSymbol += e.target.textContent;
             if (a != "" && b != "" && operationSymbol.length == 2) {                                         
-                let result = operate(operationSymbol[0],parseInt(a),parseInt(b))
+                let result = operate(operationSymbol[0],parseFloat(a),parseFloat(b))
                 result = Math.round(result * 100) / 100;
                 operationResult = result;
                 operationSymbol = operationSymbol.slice(-1);
@@ -49,8 +49,19 @@ operators.forEach(operator => {
 }) });
 
 decimal.addEventListener("click", (e) =>{
-    screenOperations.textContent = operationsDisplay + e.target.textContent;
-    operationsDisplay += e.target.textContent;
+    if (operationSymbol == ""){
+        if (!a.includes(".")) {
+            a += e.target.textContent;
+            screenOperations.textContent = operationsDisplay + e.target.textContent;
+            operationsDisplay += e.target.textContent;
+        }
+    }else if (operationSymbol != "") {
+       if (!b.includes(".")) {
+        b += e.target.textContent;
+        screenOperations.textContent = operationsDisplay + e.target.textContent;
+        operationsDisplay += e.target.textContent;
+    }
+    }
 })
 
 
