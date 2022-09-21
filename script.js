@@ -1,34 +1,57 @@
-const operations = document.querySelector(".operations");
-const result = document.querySelector(".result");
+const screenOperations = document.querySelector(".operations");
+const screenResult = document.querySelector(".result");
 const numbers = document.querySelectorAll(".numbers-container .number");
 const operators = document.querySelectorAll(".operators-container .btn");
+const decimal = document.querySelector(".dec");
 let operationsDisplay = '';
-let number = '';
-let operator = '';
+let operationSymbol = '';
+let operationResult = 0;
+let a = '';
+let b = '';
 numbers.forEach(number => {
     number.addEventListener("click", (e) => {
-        if (operations.textContent == "*" || operations.textContent == "+" || operations.textContent == "-" || operations.textContent == "÷"){
-            operations.textContent = "Error";
+        if (screenOperations.textContent == "*" || screenOperations.textContent == "+" || screenOperations.textContent == "-" || screenOperations.textContent == "÷"){
+            screenOperations.textContent = "Error";
             operationsDisplay = "";
-            result.style.fontSize = "25px";
-            result.textContent = "Press AC to restart the calculator";
+            screenResult.style.fontSize = "25px";   /* Swap font-size to 45px in AC function!!!! */
+            screenResult.textContent = "Press AC to restart the calculator";
         }else{
-        operations.textContent = operationsDisplay + e.target.textContent;
-        operationsDisplay += e.target.textContent;
-        };
-    } )}); 
+            if (operationSymbol == ""){
+                a += e.target.textContent;
+            }else if (operationSymbol != "") {
+                b += e.target.textContent;
+            }
+            screenOperations.textContent = operationsDisplay + e.target.textContent;
+            operationsDisplay += e.target.textContent;;
+    } })}); 
 
 operators.forEach(operator => {
     operator.addEventListener("click",(e) => {
-        if (operations.textContent[operations.textContent.length -1] == "*" || operations.textContent[operations.textContent.length -1] == "+" || operations.textContent[operations.textContent.length -1] == "-" || operations.textContent[operations.textContent.length -1] == "÷" ){
+        if (screenOperations.textContent[screenOperations.textContent.length -1] == "*" || screenOperations.textContent[screenOperations.textContent.length -1] == "+" || screenOperations.textContent[screenOperations.textContent.length -1] == "-" || screenOperations.textContent[screenOperations.textContent.length -1] == "÷" ){
             operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 1);
-            operations.textContent = operationsDisplay + e.target.textContent;
+            screenOperations.textContent = operationsDisplay + e.target.textContent;
             operationsDisplay += e.target.textContent;
+            operationSymbol = operationSymbol.slice(0 , operationSymbol.length - 1);
+            operationSymbol += e.target.textContent;
         }else {
-            operations.textContent = operationsDisplay + e.target.textContent;
+            screenOperations.textContent = operationsDisplay + e.target.textContent;
             operationsDisplay += e.target.textContent;
+            operationSymbol += e.target.textContent;
+            if (a != "" && b != "" && operationSymbol.length == 2) {                                         
+                let result = operate(operationSymbol[0],parseInt(a),parseInt(b))
+                result = Math.round(result * 100) / 100;
+                operationResult = result;
+                operationSymbol = operationSymbol.slice(-1);
+                a = String(result);
+                b = "";
+            } 
         }
 }) });
+
+decimal.addEventListener("click", (e) =>{
+    screenOperations.textContent = operationsDisplay + e.target.textContent;
+    operationsDisplay += e.target.textContent;
+})
 
 
 
@@ -53,19 +76,21 @@ function div(a,b) {
 }
 
 function operate(operator,a,b) {
+    let result = ""
     switch (operator){
         case "÷":
-            div(a,b);
+            result = div(a,b);
             break;
         case "*":
-            mul(a,b);
+            result = mul(a,b);
             break;
         case "-":
-            sub(a,b);
+            result = sub(a,b);
             break;
         case "+":
-            add(a,b);
+            result = add(a,b);
             break;
     }
+    return result;
 }
 
