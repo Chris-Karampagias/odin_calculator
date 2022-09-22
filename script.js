@@ -49,13 +49,21 @@ operators.forEach(operator => {
             screenOperations.textContent = operationsDisplay + e.target.textContent;
             operationsDisplay += e.target.textContent;
             operationSymbol += e.target.textContent;
-            if (a != "" && b != "" ) {                                         
+            if (a != "" && b != "" ) {   
+                if (b != "0"){                                      
                 let result = operate(operationSymbol[0],parseFloat(a),parseFloat(b))
                 result = Math.round(result * 100) / 100;
                 operationResult = result;
                 operationSymbol = operationSymbol.slice(-1);
                 a = String(result);
                 b = "";
+                }else {
+                    screenResult.textContent = "Division by zero is a crime against math!";
+                    b = "";
+                    operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 2);
+                    screenOperations.textContent = operationsDisplay;
+                    operationSymbol = "";
+                }
             }
         }
 }) });
@@ -73,12 +81,11 @@ decimal.addEventListener("click", (e) =>{
         screenOperations.textContent = operationsDisplay + e.target.textContent;
         operationsDisplay += e.target.textContent;
         }
-    }else if (a == ""){
-        screenResult.textContent = "Error";
     }
 })
 equality.addEventListener("click", () => {
-    if (a != "" && b != "") {                                         
+    if (a != "" && b != "") {   
+        if (b != "0"){                                      
         let result = operate(operationSymbol,parseFloat(a),parseFloat(b))
         result = Math.round(result * 100) / 100;
         operationResult = result;
@@ -87,10 +94,17 @@ equality.addEventListener("click", () => {
         b = "";
         screenResult.textContent = String(operationResult);
         operationSymbol = "";
-    }else if (operationsDisplay != "" && operateCounter != 0 && b != "0" && operationSymbol != "÷" ){  /* Fix division by 0 error not showing up on screen */
-        screenResult.textContent = String(operationResult);
+        }else {
+            screenResult.textContent = "Division by zero is a crime against math!";
+            b = "";
+            operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 2);
+            screenOperations.textContent = operationsDisplay;
+            operationSymbol = "";
+        }
     }else if (a == "" || operateCounter == 0){
         screenResult.textContent = "Error";
+    }else if (operationsDisplay != "" ){  
+        screenResult.textContent = String(operationResult);
     }
     }
 );
@@ -112,20 +126,12 @@ function sub(a,b) {
     return a-b;
 }
 
-function div(a,b) {     /* Fix division by 0 error not showing up on screen */
-    if (b == 0){
-        screenResult.textContent = "Division by zero is a crime against maths";
-        return "";
-    }
+function div(a,b) {    
     return a/b;
 }
 
 function operate(operator,a,b) {
     operateCounter++;
-    if (b == ""){
-        screenResult.textContent = "Error";
-        return "";
-    }
     let result = ""
     switch (operator){
         case "÷":
