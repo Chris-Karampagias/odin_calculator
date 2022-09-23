@@ -4,6 +4,7 @@ const numbers = document.querySelectorAll(".numbers-container .number");
 const operators = document.querySelectorAll(".operators-container .btn");
 const decimal = document.querySelector(".dec");
 const equality = document.querySelector(".equality");
+const clear = document.querySelector(".clear");
 let operationsDisplay = '';
 let operationSymbol = '';
 let operationResult = 0;
@@ -109,7 +110,16 @@ equality.addEventListener("click", () => {
     }
 );
 
-
+clear.addEventListener("click", (e) => {
+     operationsDisplay = '';
+     screenResult.textContent = "";
+     screenOperations.textContent = "";
+     operationSymbol = '';
+     operationResult = 0;
+     operateCounter = 0;
+     a = '';
+     b = '';
+})
 
 
 
