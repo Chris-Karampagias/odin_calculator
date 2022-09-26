@@ -42,6 +42,7 @@ body {
     display:flex;
     flex-direction: column;
     align-items: flex-end;
+    height: 90px;
     font-size: 80px;
     border: 10px solid black;
     border-radius: 7px;
@@ -52,11 +53,11 @@ body {
 }
 
 .operations{
-    font-size: 35px;
+    font-size: 25px;
 }
 
 .result{
-    font-size: 45px;
+    font-size: 30px;
 }
 
 .ac-c-container{
