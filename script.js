@@ -162,30 +162,18 @@ function undo() {
         b = lastOperation[2];
         if (screenResult.textContent != "" && operateCounter == 1){
             screenResult.textContent = "";
-            a = lastOperation[0];
-            operationSymbol = lastOperation[1];
-            b = lastOperation[2];
             operateCounter--;
             operationResult = 0;
         }else if (screenResult.textContent != "" && operateCounter > 1){
             screenResult.textContent = "";
-            a = lastOperation[0];
-            operationSymbol = lastOperation[1];
-            b = lastOperation[2];
             operateCounter--;
             operationResult = Number(lastOperation[0]);
         }else if ((screenOperations.textContent[screenOperations.textContent.length -1] == "*" || screenOperations.textContent[screenOperations.textContent.length -1] == "+" || screenOperations.textContent[screenOperations.textContent.length -1] == "-" || screenOperations.textContent[screenOperations.textContent.length -1] == "÷") && b!="" && operateCounter == 1){
-            a = lastOperation[0];
-            operationSymbol = lastOperation[1];
-            b = lastOperation[2];
             operateCounter--;
             operationResult = 0;
             screenOperations.textContent = screenOperations.textContent.slice(0,screenOperations.textContent.length - 1);
             operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 1);
         }else if ((screenOperations.textContent[screenOperations.textContent.length -1] == "*" || screenOperations.textContent[screenOperations.textContent.length -1] == "+" || screenOperations.textContent[screenOperations.textContent.length -1] == "-" || screenOperations.textContent[screenOperations.textContent.length -1] == "÷") && b!="" && operateCounter > 1){
-            a = lastOperation[0];
-            operationSymbol = lastOperation[1];
-            b = lastOperation[2];
             operateCounter--;
             operationResult = Number(lastOperation[0]);
             screenOperations.textContent = screenOperations.textContent.slice(0,screenOperations.textContent.length - 1);
@@ -209,22 +197,6 @@ function undo() {
     }else return;
 }
 
-function add(a,b) {
-    return a+b;
-}
-
-function mul(a,b) {
-    return a*b;
-}
-
-function sub(a,b) {
-    return a-b;
-}
-
-function div(a,b) {    
-    return a/b;
-}
-
 function operate(operator,a,b) {
     operateCounter++;
     let result = ""
@@ -243,4 +215,137 @@ function operate(operator,a,b) {
             break;
     }
     return result;
+}
+
+function add(a,b) {
+    return a+b;
+}
+
+function mul(a,b) {
+    return a*b;
+}
+
+function sub(a,b) {
+    return a-b;
+}
+
+function div(a,b) {    
+    return a/b;
+}
+
+window.addEventListener("keydown", (e) => {
+    for (let i=0 ; i<10 ; i++) {
+        if (e.key == `${i}`){
+            addNumberKeyboard(e);
+            break;
+        }
+    }
+
+    switch(e.key){
+        case "Escape":
+            reset();
+            break;
+        case "Backspace":
+            undo();
+            break;
+        case "Enter":
+            getResult();
+            break;
+        case ".":
+            addDecimalKeyboard(e);
+            break;
+        case "+":
+            addOperatorKeyboard(e);
+            break;
+        case "-":
+            addOperatorKeyboard(e);
+            break;
+        case "*":
+            addOperatorKeyboard(e);
+            break;
+        case "÷":
+            addOperatorKeyboard(e);
+            break;
+    }
+})
+
+
+function addNumberKeyboard(e) {
+    if (screenOperations.textContent == "*" || screenOperations.textContent == "+" || screenOperations.textContent == "-" || screenOperations.textContent == "÷"){
+        if (screenResult.textContent != "") {
+            screenResult.textContent = "";
+        }
+        screenOperations.textContent = "";
+        operationsDisplay = "";
+        operationSymbol = "";   
+        screenResult.textContent = "Error";
+    }else{
+        backspaceCounter = 0;
+        if (screenResult.textContent != "") {
+            screenResult.textContent = "";
+        }
+        if (operationSymbol == ""){
+            a += e.key;
+            lastOperation[0] += e.key;
+        }else if (operationSymbol != "") {
+            b += e.key;
+            lastOperation[2] += e.key;
+        }
+        screenOperations.textContent = operationsDisplay + e.key;
+        operationsDisplay += e.key;
+    }
+}
+
+function addOperatorKeyboard(e) {
+    if (screenResult.textContent != "") screenResult.textContent = "";
+    if (screenOperations.textContent[screenOperations.textContent.length -1] == "*" || screenOperations.textContent[screenOperations.textContent.length -1] == "+" || screenOperations.textContent[screenOperations.textContent.length -1] == "-" || screenOperations.textContent[screenOperations.textContent.length -1] == "÷" ){
+        operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 1);
+        screenOperations.textContent = operationsDisplay + e.key;
+        operationsDisplay += e.key;
+        operationSymbol = operationSymbol.slice(0 , operationSymbol.length - 1);
+        lastOperation[1] = lastOperation[1].slice(0, lastOperation[1].length -1 );
+        operationSymbol += e.key;
+        lastOperation[1] += e.key;
+    }else {
+        backspaceCounter = 0;
+        screenOperations.textContent = operationsDisplay + e.key;
+        operationsDisplay += e.key;
+        operationSymbol += e.key;
+        lastOperation[1] += e.key;
+        if (a != "" && b != "" ) {   
+            if (b != "0"){                                      
+                let result = operate(operationSymbol[0],parseFloat(a),parseFloat(b))
+                result = Math.round(result * 100) / 100;
+                operationResult = result;
+                lastOperation[0] = a;
+                lastOperation[1] = operationSymbol[0];
+                lastOperation[2] = b;
+                a = String(result);
+                b = "";
+                operationSymbol = operationSymbol.slice(-1);
+            }else {
+                alert("Division by zero is undefinedg");
+                b = "";
+                operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 1);
+                screenOperations.textContent = operationsDisplay;
+            }
+        }
+    }
+}
+
+function addDecimalKeyboard(e){
+    backspaceCounter = 0;
+    if (operationSymbol == ""){
+        if (!a.includes(".")) {
+            a += e.key;
+            screenOperations.textContent = operationsDisplay + e.key;
+            operationsDisplay += e.key;
+        }
+    }else if (operationSymbol != "") {
+       if (!b.includes(".")) {
+        b += e.key;
+        screenOperations.textContent = operationsDisplay + e.key;
+        operationsDisplay += e.key;
+        }
+    }
 }
