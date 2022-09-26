@@ -14,70 +14,81 @@ let a = '';
 let b = '';
 let lastOperation = ['','',''];
 let backspaceCounter = 0;
+
 numbers.forEach(number => {
-    number.addEventListener("click", (e) => {
-        if (screenOperations.textContent == "*" || screenOperations.textContent == "+" || screenOperations.textContent == "-" || screenOperations.textContent == "÷"){
-            if (screenResult.textContent != "") {
-                screenResult.textContent = "";
-            }
-            screenOperations.textContent = "";
-            operationsDisplay = "";
-            operationSymbol = "";   
-            screenResult.textContent = "Error";
-        }else{
-            backspaceCounter = 0;
-            if (screenResult.textContent != "") {
-                screenResult.textContent = "";
-            }
-            if (operationSymbol == ""){
-                a += e.target.textContent;
-                lastOperation[0] += e.target.textContent;
-            }else if (operationSymbol != "") {
-                b += e.target.textContent;
-                lastOperation[2] += e.target.textContent;
-            }
-            screenOperations.textContent = operationsDisplay + e.target.textContent;
-            operationsDisplay += e.target.textContent;;
-    } })}); 
+    number.addEventListener("click", addNumber)
+}); 
+
+function addNumber(e) {
+    if (screenOperations.textContent == "*" || screenOperations.textContent == "+" || screenOperations.textContent == "-" || screenOperations.textContent == "÷"){
+        if (screenResult.textContent != "") {
+            screenResult.textContent = "";
+        }
+        screenOperations.textContent = "";
+        operationsDisplay = "";
+        operationSymbol = "";   
+        screenResult.textContent = "Error";
+    }else{
+        backspaceCounter = 0;
+        if (screenResult.textContent != "") {
+            screenResult.textContent = "";
+        }
+        if (operationSymbol == ""){
+            a += e.target.textContent;
+            lastOperation[0] += e.target.textContent;
+        }else if (operationSymbol != "") {
+            b += e.target.textContent;
+            lastOperation[2] += e.target.textContent;
+        }
+        screenOperations.textContent = operationsDisplay + e.target.textContent;
+        operationsDisplay += e.target.textContent;;
+    }
+}
 
 operators.forEach(operator => {
-    operator.addEventListener("click",(e) => {
-        if (screenResult.textContent != "") screenResult.textContent = "";
+    operator.addEventListener("click",addOperator) 
+});
 
-        if (screenOperations.textContent[screenOperations.textContent.length -1] == "*" || screenOperations.textContent[screenOperations.textContent.length -1] == "+" || screenOperations.textContent[screenOperations.textContent.length -1] == "-" || screenOperations.textContent[screenOperations.textContent.length -1] == "÷" ){
-            operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 1);
-            screenOperations.textContent = operationsDisplay + e.target.textContent;
-            operationsDisplay += e.target.textContent;
-            operationSymbol = operationSymbol.slice(0 , operationSymbol.length - 1);
-            operationSymbol += e.target.textContent;
-        }else {
-            backspaceCounter = 0;
-            screenOperations.textContent = operationsDisplay + e.target.textContent;
-            operationsDisplay += e.target.textContent;
-            operationSymbol += e.target.textContent;
-            lastOperation[1] += e.target.textContent;
-            if (a != "" && b != "" ) {   
-                if (b != "0"){                                      
-                    let result = operate(operationSymbol[0],parseFloat(a),parseFloat(b))
-                    result = Math.round(result * 100) / 100;
-                    operationResult = result;
-                    lastOperation[0] = a;
-                    lastOperation[1] = operationSymbol[0];
-                    lastOperation[2] = b;
-                    a = String(result);
-                    b = "";
-                    operationSymbol = operationSymbol.slice(-1);
-                }else {
-                    alert("Division by zero is undefined");
-                    b = "";
-                    operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 1);
-                    screenOperations.textContent = operationsDisplay;
-                }
+function addOperator(e) {
+    if (screenResult.textContent != "") screenResult.textContent = "";
+    if (screenOperations.textContent[screenOperations.textContent.length -1] == "*" || screenOperations.textContent[screenOperations.textContent.length -1] == "+" || screenOperations.textContent[screenOperations.textContent.length -1] == "-" || screenOperations.textContent[screenOperations.textContent.length -1] == "÷" ){
+        operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 1);
+        screenOperations.textContent = operationsDisplay + e.target.textContent;
+        operationsDisplay += e.target.textContent;
+        operationSymbol = operationSymbol.slice(0 , operationSymbol.length - 1);
+        lastOperation[1] = lastOperation[1].slice(0, lastOperation[1].length -1 );
+        operationSymbol += e.target.textContent;
+        lastOperation[1] += e.target.textContent;
+    }else {
+        backspaceCounter = 0;
+        screenOperations.textContent = operationsDisplay + e.target.textContent;
+        operationsDisplay += e.target.textContent;
+        operationSymbol += e.target.textContent;
+        lastOperation[1] += e.target.textContent;
+        if (a != "" && b != "" ) {   
+            if (b != "0"){                                      
+                let result = operate(operationSymbol[0],parseFloat(a),parseFloat(b))
+                result = Math.round(result * 100) / 100;
+                operationResult = result;
+                lastOperation[0] = a;
+                lastOperation[1] = operationSymbol[0];
+                lastOperation[2] = b;
+                a = String(result);
+                b = "";
+                operationSymbol = operationSymbol.slice(-1);
+            }else {
+                alert("Division by zero is undefinedg");
+                b = "";
+                operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 1);
+                screenOperations.textContent = operationsDisplay;
             }
         }
-}) });
+    }
+}
 
-decimal.addEventListener("click", (e) =>{
+decimal.addEventListener("click", addDecimal);
+
+function addDecimal(e){
     backspaceCounter = 0;
     if (operationSymbol == ""){
         if (!a.includes(".")) {
@@ -92,8 +103,11 @@ decimal.addEventListener("click", (e) =>{
         operationsDisplay += e.target.textContent;
         }
     }
-})
-equality.addEventListener("click", () => {
+}
+
+equality.addEventListener("click", getResult);
+
+function getResult() {
     if (screenOperations.textContent[screenOperations.textContent.length -1] == "*" || screenOperations.textContent[screenOperations.textContent.length -1] == "+" || screenOperations.textContent[screenOperations.textContent.length -1] == "-" || screenOperations.textContent[screenOperations.textContent.length -1] == "÷" ){
         screenResult.textContent = "Malformed expression";
         return;
@@ -122,11 +136,12 @@ equality.addEventListener("click", () => {
     }else if (operationsDisplay != "" ){  
         screenResult.textContent = String(operationResult);
     }
-    }
-);
+}
 
-clear.addEventListener("click", () => {
-     operationsDisplay = '';
+clear.addEventListener("click", reset);
+
+function reset(){
+    operationsDisplay = '';
      screenResult.textContent = "";
      screenOperations.textContent = "";
      operationSymbol = '';
@@ -135,9 +150,11 @@ clear.addEventListener("click", () => {
      operateCounter = 0;
      a = '';
      b = '';
-})
+}
 
-backspace.addEventListener("click", () => {
+backspace.addEventListener("click", undo);
+
+function undo() {
     backspaceCounter++ ;
     if (backspaceCounter <= 2){
         a = lastOperation[0];
@@ -190,8 +207,7 @@ backspace.addEventListener("click", () => {
             operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 1);
         }
     }else return;
-})
-
+}
 
 function add(a,b) {
     return a+b;
