@@ -213,6 +213,9 @@ function operate(operator,a,b) {
         case "+":
             result = add(a,b);
             break;
+        case "/":
+            result = div(a,b);
+            break;
     }
     return result;
 }
@@ -263,7 +266,7 @@ window.addEventListener("keydown", (e) => {
         case "*":
             addOperatorKeyboard(e);
             break;
-        case "÷":
+        case "/":
             addOperatorKeyboard(e);
             break;
     }
