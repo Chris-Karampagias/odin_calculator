@@ -300,21 +300,36 @@ function addNumberKeyboard(e) {
 }
 
 function addOperatorKeyboard(e) {
+    let operator = "";
+    switch (e.key){
+        case "-":
+            operator = e.key;
+            break;
+        case "+":
+            operator = e.key;
+            break;
+        case "*":
+            operator = e.key;
+            break;
+        case "/":
+            operator = "÷"
+            break;
+    }
     if (screenResult.textContent != "") screenResult.textContent = "";
     if (screenOperations.textContent[screenOperations.textContent.length -1] == "*" || screenOperations.textContent[screenOperations.textContent.length -1] == "+" || screenOperations.textContent[screenOperations.textContent.length -1] == "-" || screenOperations.textContent[screenOperations.textContent.length -1] == "÷" ){
         operationsDisplay = operationsDisplay.slice(0,operationsDisplay.length - 1);
-        screenOperations.textContent = operationsDisplay + e.key;
-        operationsDisplay += e.key;
+        screenOperations.textContent = operationsDisplay + operator;
+        operationsDisplay += operator;
         operationSymbol = operationSymbol.slice(0 , operationSymbol.length - 1);
         lastOperation[1] = lastOperation[1].slice(0, lastOperation[1].length -1 );
-        operationSymbol += e.key;
-        lastOperation[1] += e.key;
+        operationSymbol += operator;
+        lastOperation[1] += operator;
     }else {
         backspaceCounter = 0;
-        screenOperations.textContent = operationsDisplay + e.key;
-        operationsDisplay += e.key;
-        operationSymbol += e.key;
-        lastOperation[1] += e.key;
+        screenOperations.textContent = operationsDisplay + operator;
+        operationsDisplay += operator;
+        operationSymbol += operator;
+        lastOperation[1] += operator;
         if (a != "" && b != "" ) {   
             if (b != "0"){                                      
                 let result = operate(operationSymbol[0],parseFloat(a),parseFloat(b))
